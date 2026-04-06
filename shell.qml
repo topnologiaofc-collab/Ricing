@@ -49,7 +49,7 @@ PanelWindow {
 
             Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
 
-            MediaPlayer { Layout.alignment: Qt.AlignHCenter }
+            MediaWidget { Layout.alignment: Qt.AlignHCenter }
 
             Item { Layout.fillHeight: true }
 
