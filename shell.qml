@@ -37,7 +37,7 @@ PanelWindow {
             anchors.bottomMargin: 10
             spacing: 0
 
-            Clock {
+            SidebarClock {
                 id: clock
                 Layout.alignment: Qt.AlignHCenter
                 onRequestCloseOthers: (who) => root.closeOthers(who)
@@ -45,11 +45,11 @@ PanelWindow {
 
             Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
 
-            Workspaces { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 2; Layout.bottomMargin: 2 }
+            SidebarWorkspaces { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 2; Layout.bottomMargin: 2 }
 
             Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
 
-            MediaWidget { Layout.alignment: Qt.AlignHCenter }
+            SidebarMedia { Layout.alignment: Qt.AlignHCenter }
 
             Item { Layout.fillHeight: true }
 
@@ -58,11 +58,11 @@ PanelWindow {
             Row {
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 4
-                Wifi { id: wifi; onRequestCloseOthers: (who) => root.closeOthers(who) }
-                Bluetooth { id: bt; onRequestCloseOthers: (who) => root.closeOthers(who) }
+                SidebarWifi { id: wifi; onRequestCloseOthers: (who) => root.closeOthers(who) }
+                SidebarBluetooth { id: bt; onRequestCloseOthers: (who) => root.closeOthers(who) }
             }
 
-            Battery { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 4 }
+            SidebarBattery { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 4 }
             Item { Layout.preferredHeight: 6 }
         }
     }

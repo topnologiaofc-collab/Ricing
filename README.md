@@ -6,12 +6,12 @@ Pixel-faithful sidebar recreation from the provided HTML reference, adapted for 
 
 - `shell.qml` — root `PanelWindow`, left/top/bottom anchored, exclusive zone enabled.
 - `Theme.qml` — color + size tokens.
-- `Clock.qml` — clock widget and right-side calendar popup.
-- `Workspaces.qml` — Hyprland workspace indicators and switching.
-- `MediaWidget.qml` — MPRIS track data, controls, seek and progress.
-- `Wifi.qml` — sidebar Wi-Fi state + popup list and `nmcli` connect fallback.
-- `Bluetooth.qml` — sidebar Bluetooth state + popup with toggle/devices.
-- `Battery.qml` — battery indicator + percentage (UPower with fallback support).
+- `SidebarClock.qml` — clock widget and right-side calendar popup.
+- `SidebarWorkspaces.qml` — Hyprland workspace indicators and switching.
+- `SidebarMedia.qml` — MPRIS track data, controls, seek and progress.
+- `SidebarWifi.qml` — sidebar Wi-Fi state + popup list and `nmcli` connect fallback.
+- `SidebarBluetooth.qml` — sidebar Bluetooth state + popup with toggle/devices.
+- `SidebarBattery.qml` — battery indicator + percentage (UPower with fallback support).
 
 ## Dependencies
 
