@@ -24,12 +24,13 @@ Item {
     property real cachedPosition: 0
     property real cachedLength: 1
     property bool cachedPlaying: false
+    property real lastRawPosition: -1
 
     readonly property string displayTitle: spotifyPlayer && spotifyPlayer.trackTitle ? spotifyPlayer.trackTitle : cachedTitle
     readonly property string displayArtist: spotifyPlayer && spotifyPlayer.trackArtist ? spotifyPlayer.trackArtist : cachedArtist
     readonly property string displayArtUrl: spotifyPlayer && spotifyPlayer.trackArtUrl ? spotifyPlayer.trackArtUrl : cachedArtUrl
-    readonly property real displayLength: spotifyPlayer && spotifyPlayer.length > 0 ? spotifyPlayer.length : Math.max(1, cachedLength)
-    readonly property real displayPosition: spotifyPlayer ? spotifyPlayer.position : cachedPosition
+    readonly property real displayLength: Math.max(1, cachedLength)
+    readonly property real displayPosition: Math.max(0, cachedPosition)
     readonly property bool isPlaying: spotifyPlayer ? (spotifyPlayer.playbackState === MprisPlaybackState.Playing) : cachedPlaying
 
     function msToClock(ms) {
@@ -37,13 +38,34 @@ Item {
         return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
     }
 
+    function toMs(v) {
+        const n = Number(v || 0);
+        if (n <= 0) return 0;
+        if (n > 1e12) return n / 1e6;   // ns -> ms
+        if (n > 1e7) return n / 1000;   // us -> ms
+        if (n < 1e4) return n * 1000;   // s  -> ms
+        return n;                       // already ms
+    }
+
+    function fromMs(ms, reference) {
+        const ref = Number(reference || 0);
+        if (ref > 1e12) return ms * 1e6; // ms -> ns
+        if (ref > 1e7) return ms * 1000; // ms -> us
+        if (ref < 1e4) return ms / 1000; // ms -> s
+        return ms;
+    }
+
     function refreshCache() {
         if (!spotifyPlayer) return;
         if (spotifyPlayer.trackTitle) cachedTitle = spotifyPlayer.trackTitle;
         if (spotifyPlayer.trackArtist !== undefined) cachedArtist = spotifyPlayer.trackArtist;
         if (spotifyPlayer.trackArtUrl) cachedArtUrl = spotifyPlayer.trackArtUrl;
-        if (spotifyPlayer.length > 0) cachedLength = spotifyPlayer.length;
-        if (spotifyPlayer.position >= 0) cachedPosition = spotifyPlayer.position;
+        if (spotifyPlayer.length > 0) cachedLength = toMs(spotifyPlayer.length);
+        if (spotifyPlayer.position >= 0) {
+            const pos = toMs(spotifyPlayer.position);
+            cachedPosition = pos;
+            lastRawPosition = pos;
+        }
         cachedPlaying = spotifyPlayer.playbackState === MprisPlaybackState.Playing;
     }
 
@@ -74,6 +96,15 @@ Item {
             root.refreshCache();
             if (!root.spotifyPlayer && root.cachedPlaying) {
                 root.cachedPlaying = false;
+            }
+            if (root.cachedPlaying) {
+                const current = root.spotifyPlayer ? root.toMs(root.spotifyPlayer.position) : root.cachedPosition;
+                if (Math.abs(current - root.lastRawPosition) < 1) {
+                    root.cachedPosition = Math.min(root.cachedLength, root.cachedPosition + interval);
+                } else {
+                    root.cachedPosition = current;
+                    root.lastRawPosition = current;
+                }
             }
         }
     }
@@ -162,9 +193,9 @@ Item {
                         const pos = ratio * root.displayLength;
                         root.cachedPosition = pos;
                         if (root.spotifyPlayer && typeof root.spotifyPlayer.setPosition === "function")
-                            root.spotifyPlayer.setPosition(pos);
+                            root.spotifyPlayer.setPosition(root.fromMs(pos, root.spotifyPlayer.length));
                         else if (root.spotifyPlayer)
-                            root.spotifyPlayer.position = pos;
+                            root.spotifyPlayer.position = root.fromMs(pos, root.spotifyPlayer.length);
                     }
                 }
             }
