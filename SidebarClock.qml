@@ -17,7 +17,7 @@ Item {
     signal requestCloseOthers(string who)
     property date nowTime: new Date()
 
-    width: 104
+    width: 160
     implicitHeight: clockButton.implicitHeight
 
     function iso(d) {
@@ -35,28 +35,28 @@ Item {
     Rectangle {
         id: clockButton
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 96
-        height: 34
+        width: 152
+        height: 44
         radius: 10
         color: mouse.containsMouse || root.open ? Qt.rgba(124/255,58/255,237/255,0.15) : "transparent"
-        implicitHeight: 34
+        implicitHeight: 44
 
         Row {
             id: col
             anchors.centerIn: parent
-            spacing: 6
+            spacing: 8
             Text {
                 text: Qt.formatTime(root.nowTime, "hh:mm")
                 color: Theme.textPrimary
-                font.pixelSize: 21
+                font.pixelSize: 28
                 font.weight: Font.Bold
                 anchors.verticalCenter: parent.verticalCenter
             }
-            Rectangle { width: 2; height: 18; radius: 1; color: Theme.accent; anchors.verticalCenter: parent.verticalCenter }
+            Rectangle { width: 2; height: 22; radius: 1; color: Theme.accent; anchors.verticalCenter: parent.verticalCenter }
             Text {
                 text: `${Qt.locale("pt_BR").dayName(root.nowTime.getDay(), Locale.ShortFormat).slice(0,3).toUpperCase()} ${Qt.formatDate(root.nowTime, "dd")}`
                 color: Theme.accent
-                font.pixelSize: 13
+                font.pixelSize: 16
                 font.weight: Font.Medium
                 anchors.verticalCenter: parent.verticalCenter
             }
