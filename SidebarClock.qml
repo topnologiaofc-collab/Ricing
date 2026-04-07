@@ -92,8 +92,8 @@ Item {
         visible: root.open
         color: "transparent"
         anchor.window: root.QsWindow.window
-        anchor.rect.x: root.width + 16
-        anchor.rect.y: 10
+        anchor.rect.x: Math.max(6, root.mapToItem(null, 0, 0).x - 4)
+        anchor.rect.y: root.mapToItem(null, 0, 0).y + clockButton.height + 8
         implicitWidth: Theme.popupWidth
         implicitHeight: 332
 

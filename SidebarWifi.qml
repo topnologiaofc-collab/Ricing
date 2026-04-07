@@ -88,8 +88,8 @@ Item {
         visible: root.open
         color: "transparent"
         anchor.window: root.QsWindow.window
-        anchor.rect.x: 80
-        anchor.rect.y: root.mapToItem(null, 0, 0).y - 90
+        anchor.rect.x: Math.max(6, root.mapToItem(null, 0, 0).x - 4)
+        anchor.rect.y: root.mapToItem(null, 0, 0).y + btn.height + 8
         implicitWidth: Theme.popupWidth
         implicitHeight: Math.max(120, 26 + root.networks.length * 28)
 

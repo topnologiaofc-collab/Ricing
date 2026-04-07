@@ -41,6 +41,6 @@ Or directly reference `shell.qml` in your active Quickshell configuration.
 
 ## Notes
 
-- Popup windows are implemented with `PopupWindow` and anchored to the sidebar window.
+- Popup windows are implemented with `PopupWindow` and anchored below the clicked widget (downward open).
 - Wi-Fi uses `nmcli` scanning/connection as a practical fallback path.
 - Styling tokens mirror the provided design: radius, spacing, muted/primary text, and accent behavior.
