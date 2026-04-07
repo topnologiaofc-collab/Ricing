@@ -6,9 +6,9 @@ Pixel-faithful sidebar recreation from the provided HTML reference, adapted for 
 
 - `shell.qml` — root `PanelWindow`, top/left/right anchored as a horizontal desktop bar, exclusive zone enabled.
 - `Theme.qml` — color + size tokens.
-- `SidebarClock.qml` — clock widget and right-side calendar popup.
+- `SidebarClock.qml` — clock widget and downward calendar popup.
 - `SidebarWorkspaces.qml` — Hyprland workspace indicators and switching.
-- `SidebarMedia.qml` — MPRIS track data, controls, seek and progress.
+- `SidebarMedia.qml` — horizontal MPRIS row: album art (play/pause on click), previous, progress, next.
 - `SidebarWifi.qml` — sidebar Wi-Fi state + popup list and `nmcli` connect fallback.
 - `SidebarBluetooth.qml` — sidebar Bluetooth state + popup with toggle/devices.
 - `SidebarBattery.qml` — battery indicator + percentage (UPower with fallback support).
@@ -42,5 +42,6 @@ Or directly reference `shell.qml` in your active Quickshell configuration.
 ## Notes
 
 - Popup windows are implemented with `PopupWindow` and anchored below the clicked widget (downward open).
+- Accent color is read from Matugen-generated files and auto-refreshes periodically.
 - Wi-Fi uses `nmcli` scanning/connection as a practical fallback path.
 - Styling tokens mirror the provided design: radius, spacing, muted/primary text, and accent behavior.

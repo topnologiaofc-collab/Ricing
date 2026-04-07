@@ -8,10 +8,10 @@ PanelWindow {
     anchors.left: true
     anchors.right: true
     anchors.top: true
-    exclusiveZone: 148
+    exclusiveZone: 102
     color: "transparent"
 
-    implicitHeight: 148
+    implicitHeight: 102
 
     function closeOthers(name) {
         if (name !== "calendar" && clockLoader.item) clockLoader.item.open = false;
@@ -24,7 +24,7 @@ PanelWindow {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 0
-        height: 136
+        height: 92
         radius: Theme.sidebarRadius
         color: Qt.rgba(13/255,17/255,23/255,0.85)
         border.width: 1
@@ -32,8 +32,8 @@ PanelWindow {
 
         RowLayout {
             anchors.fill: parent
-            anchors.leftMargin: 14
-            anchors.rightMargin: 14
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
             spacing: 0
 
             Loader {
@@ -43,15 +43,15 @@ PanelWindow {
                 onLoaded: if (item && item.requestCloseOthers) item.requestCloseOthers.connect(root.closeOthers)
             }
 
-            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 36; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
+            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 28; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
 
             Loader { Layout.alignment: Qt.AlignVCenter; Layout.leftMargin: 2; Layout.rightMargin: 2; source: Qt.resolvedUrl("SidebarWorkspaces.qml") }
 
-            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 36; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
+            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 28; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
 
             Loader { Layout.alignment: Qt.AlignVCenter; source: Qt.resolvedUrl("SidebarMedia.qml") }
 
-            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 36; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
+            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 28; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
 
             Row {
                 Layout.alignment: Qt.AlignVCenter
