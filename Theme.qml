@@ -2,8 +2,9 @@ pragma Singleton
 import QtQuick
 import Quickshell.Io
 
-QtObject {
+Item {
     id: root
+    visible: false
     readonly property color sidebarBg: "#0d1117"
     readonly property color popupBg: "#0b0f19"
     property color accent: accentSource
