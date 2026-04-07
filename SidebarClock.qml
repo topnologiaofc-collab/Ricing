@@ -17,7 +17,7 @@ Item {
     signal requestCloseOthers(string who)
     property date nowTime: new Date()
 
-    width: 64
+    width: 104
     implicitHeight: clockButton.implicitHeight
 
     function iso(d) {
@@ -35,36 +35,28 @@ Item {
     Rectangle {
         id: clockButton
         anchors.horizontalCenter: parent.horizontalCenter
-        width: 50
+        width: 96
+        height: 34
         radius: 10
         color: mouse.containsMouse || root.open ? Qt.rgba(124/255,58/255,237/255,0.15) : "transparent"
-        implicitHeight: col.implicitHeight + 10
+        implicitHeight: 34
 
-        Column {
+        Row {
             id: col
             anchors.centerIn: parent
-            spacing: 1
+            spacing: 6
             Text {
-                text: Qt.formatTime(root.nowTime, "hh\nmm")
+                text: Qt.formatTime(root.nowTime, "hh:mm")
                 color: Theme.textPrimary
-                font.pixelSize: 19
+                font.pixelSize: 15
                 font.weight: Font.Bold
-                horizontalAlignment: Text.AlignHCenter
-                lineHeight: 1.05
             }
-            Rectangle { width: 20; height: 2; radius: 1; color: Theme.accent; anchors.horizontalCenter: parent.horizontalCenter }
+            Rectangle { width: 2; height: 14; radius: 1; color: Theme.accent; anchors.verticalCenter: parent.verticalCenter }
             Text {
-                text: Qt.locale("pt_BR").dayName(root.nowTime.getDay(), Locale.ShortFormat).slice(0,3).toUpperCase()
+                text: `${Qt.locale("pt_BR").dayName(root.nowTime.getDay(), Locale.ShortFormat).slice(0,3).toUpperCase()} ${Qt.formatDate(root.nowTime, "dd")}`
                 color: Theme.accent
-                font.pixelSize: 8
-                font.letterSpacing: 1.5
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-            Text {
-                text: Qt.formatDate(root.nowTime, "dd")
-                color: Theme.textMuted
-                font.pixelSize: 11
-                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 10
+                font.weight: Font.Medium
             }
         }
 

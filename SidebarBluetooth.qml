@@ -6,41 +6,43 @@ import "."
 
 Item {
     id: root
-    width: 28
+    width: 76
+    height: 36
     property bool open: false
     signal requestCloseOthers(string who)
 
     readonly property var adapter: Bluetooth.defaultAdapter
     readonly property bool powered: adapter ? adapter.powered : false
 
-    Rectangle {
-        id: btn
-        width: 28
-        height: 28
-        radius: 8
-        color: (root.open || mouse.containsMouse) && root.powered ? Qt.rgba(124/255,58/255,237/255,0.15) : "transparent"
-        Text { anchors.centerIn: parent; text: "BT"; color: root.powered ? Theme.accent : Theme.textMuted; font.pixelSize: 10 }
-        MouseArea {
-            id: mouse
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                root.open = !root.open;
-                if (root.open)
-                    root.requestCloseOthers("bt");
+    Row {
+        anchors.centerIn: parent
+        spacing: 6
+
+        Rectangle {
+            id: btn
+            width: 28
+            height: 28
+            radius: 8
+            color: (root.open || mouse.containsMouse) && root.powered ? Qt.alpha(Theme.accent, 0.15) : "transparent"
+            Text { anchors.centerIn: parent; text: "BT"; color: root.powered ? Theme.accent : Theme.textMuted; font.pixelSize: 10 }
+            MouseArea {
+                id: mouse
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                    root.open = !root.open;
+                    if (root.open)
+                        root.requestCloseOthers("bt");
+                }
             }
         }
-    }
 
-    Text {
-        anchors.top: btn.bottom
-        anchors.topMargin: 2
-        anchors.horizontalCenter: btn.horizontalCenter
-        width: 28
-        text: root.powered ? "on" : "off"
-        color: root.powered ? Theme.accent : Theme.textMuted
-        font.pixelSize: 7
-        horizontalAlignment: Text.AlignHCenter
+        Text {
+            text: root.powered ? "on" : "off"
+            color: root.powered ? Theme.accent : Theme.textMuted
+            font.pixelSize: 9
+            verticalAlignment: Text.AlignVCenter
+        }
     }
 
     PopupWindow {
@@ -71,7 +73,7 @@ Item {
                     Text { text: root.powered ? "ON" : "OFF"; color: Theme.accent; font.pixelSize: 8 }
                     Rectangle {
                         width: 26; height: 14; radius: 7
-                        color: root.powered ? Qt.rgba(124/255,58/255,237/255,0.5) : Qt.rgba(1,1,1,0.1)
+                        color: root.powered ? Qt.alpha(Theme.accent, 0.5) : Qt.rgba(1,1,1,0.1)
                         Rectangle {
                             width: 10; height: 10; radius: 5
                             y: 2
@@ -92,7 +94,7 @@ Item {
                         Layout.fillWidth: true
                         implicitHeight: 28
                         radius: 8
-                        color: modelData.connected ? Qt.rgba(124/255,58/255,237/255,0.18) : rowMouse.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
+                        color: modelData.connected ? Qt.alpha(Theme.accent, 0.18) : rowMouse.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
 
                         Row {
                             anchors.fill: parent

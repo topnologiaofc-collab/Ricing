@@ -8,12 +8,13 @@ Item {
     width: 360
     height: 74
 
+    readonly property var playersList: (Mpris.players && Mpris.players.values) ? Mpris.players.values : (Mpris.players || [])
     readonly property var activePlayer: {
-        for (const p of Mpris.players) {
+        for (const p of playersList) {
             if (p.playbackState === MprisPlaybackState.Playing)
                 return p;
         }
-        return Mpris.players.length > 0 ? Mpris.players[0] : null;
+        return playersList.length > 0 ? playersList[0] : null;
     }
 
     function msToClock(ms) {
@@ -30,8 +31,8 @@ Item {
             width: 44
             height: 44
             radius: 10
-            color: Qt.rgba(124/255,58/255,237/255,0.18)
-            border.color: Qt.rgba(124/255,58/255,237/255,0.28)
+            color: Qt.alpha(Theme.accent, 0.18)
+            border.color: Qt.alpha(Theme.accent, 0.28)
             border.width: 1
             clip: true
 
@@ -50,7 +51,12 @@ Item {
             }
             MouseArea {
                 anchors.fill: parent
-                onClicked: if (root.activePlayer) root.activePlayer.togglePlaying()
+                onClicked: {
+                    if (!root.activePlayer) return;
+                    if (typeof root.activePlayer.togglePlaying === "function") root.activePlayer.togglePlaying();
+                    else if (root.activePlayer.playbackState === MprisPlaybackState.Playing && typeof root.activePlayer.pause === "function") root.activePlayer.pause();
+                    else if (typeof root.activePlayer.play === "function") root.activePlayer.play();
+                }
             }
         }
 

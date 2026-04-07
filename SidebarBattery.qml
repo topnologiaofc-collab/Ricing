@@ -5,7 +5,8 @@ import "."
 
 Item {
     id: root
-    width: 64
+    width: 84
+    height: 48
     property int fallbackPct: 0
 
     readonly property int pct: {
@@ -14,30 +15,28 @@ Item {
         return fallbackPct;
     }
 
-    readonly property color battColor: pct < 20 ? "#ef4444" : "#22c55e"
-    readonly property color battBorder: pct < 20 ? Qt.rgba(239/255, 68/255, 68/255, 0.65) : Qt.rgba(34/255, 197/255, 94/255, 0.65)
+    readonly property color battBorder: pct < 20 ? Qt.rgba(239/255, 68/255, 68/255, 0.8) : Qt.rgba(34/255, 197/255, 94/255, 0.8)
 
     Column {
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing: 3
-        topPadding: 4
+        anchors.centerIn: parent
+        spacing: 4
 
         Item {
-            width: 22
-            height: 11
+            width: 30
+            height: 16
 
             Rectangle {
-                x: 0; y: 0; width: 19; height: 11; radius: 3
-                border.width: 1.5
+                x: 0; y: 0; width: 26; height: 16; radius: 4
+                border.width: 1.8
                 border.color: root.battBorder
                 color: "transparent"
             }
             Rectangle {
-                x: 2; y: 2; width: Math.max(2, 15 * (root.pct / 100)); height: 7; radius: 2
-                color: Qt.rgba(1,1,1,0.5)
+                x: 2.5; y: 3; width: Math.max(3, 20 * (root.pct / 100)); height: 10; radius: 2
+                color: root.pct < 20 ? Qt.rgba(239/255, 68/255, 68/255, 0.65) : Qt.alpha(Theme.accent, 0.7)
             }
             Rectangle {
-                x: 19; y: 3; width: 3; height: 5; radius: 1
+                x: 26; y: 5; width: 4; height: 6; radius: 1
                 color: Qt.rgba(1,1,1,0.25)
             }
         }
@@ -45,7 +44,7 @@ Item {
         Text {
             text: `${root.pct}%`
             color: Theme.textPrimary
-            font.pixelSize: 9
+            font.pixelSize: 11
             font.weight: Font.Medium
             anchors.horizontalCenter: parent.horizontalCenter
         }

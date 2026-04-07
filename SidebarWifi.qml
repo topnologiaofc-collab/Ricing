@@ -6,7 +6,8 @@ import "."
 
 Item {
     id: root
-    width: 28
+    width: 86
+    height: 36
     property bool open: false
     signal requestCloseOthers(string who)
 
@@ -21,41 +22,41 @@ Item {
         return 1;
     }
 
-    function refresh() {
-        scan.running = true;
-    }
+    function refresh() { scan.running = true; }
 
-    Rectangle {
-        id: btn
-        width: 28
-        height: 28
-        radius: 8
-        color: root.open || mouse.containsMouse ? Qt.rgba(124/255,58/255,237/255,0.15) : "transparent"
-        Text { anchors.centerIn: parent; text: "W"; color: root.activeSsid !== "--" ? Theme.accent : Theme.textMuted; font.pixelSize: 11 }
-        MouseArea {
-            id: mouse
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: {
-                root.open = !root.open;
-                if (root.open) {
-                    root.requestCloseOthers("wifi");
-                    root.refresh();
+    Row {
+        anchors.centerIn: parent
+        spacing: 6
+
+        Rectangle {
+            id: btn
+            width: 28
+            height: 28
+            radius: 8
+            color: root.open || mouse.containsMouse ? Qt.alpha(Theme.accent, 0.15) : "transparent"
+            Text { anchors.centerIn: parent; text: "W"; color: root.activeSsid !== "--" ? Theme.accent : Theme.textMuted; font.pixelSize: 11 }
+            MouseArea {
+                id: mouse
+                anchors.fill: parent
+                hoverEnabled: true
+                onClicked: {
+                    root.open = !root.open;
+                    if (root.open) {
+                        root.requestCloseOthers("wifi");
+                        root.refresh();
+                    }
                 }
             }
         }
-    }
 
-    Text {
-        anchors.top: btn.bottom
-        anchors.topMargin: 2
-        anchors.horizontalCenter: btn.horizontalCenter
-        width: 28
-        text: (root.activeSsid || "--").slice(0, 5)
-        color: root.activeSsid !== "--" ? Theme.accent : Theme.textMuted
-        font.pixelSize: 7
-        elide: Text.ElideRight
-        horizontalAlignment: Text.AlignHCenter
+        Text {
+            width: 48
+            text: (root.activeSsid || "--").slice(0, 8)
+            color: root.activeSsid !== "--" ? Theme.accent : Theme.textMuted
+            font.pixelSize: 9
+            elide: Text.ElideRight
+            verticalAlignment: Text.AlignVCenter
+        }
     }
 
     Process {
@@ -112,13 +113,12 @@ Item {
                         Layout.fillWidth: true
                         implicitHeight: 24
                         radius: 8
-                        color: modelData.active ? Qt.rgba(124/255,58/255,237/255,0.18) : rowMouse.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
+                        color: modelData.active ? Qt.alpha(Theme.accent, 0.18) : rowMouse.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
 
                         Row {
                             anchors.fill: parent
                             anchors.margins: 6
                             spacing: 8
-
                             Row {
                                 spacing: 1
                                 anchors.verticalCenter: parent.verticalCenter
