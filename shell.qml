@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import "."
 
 PanelWindow {
@@ -17,6 +18,26 @@ PanelWindow {
         if (name !== "calendar" && clockLoader.item) clockLoader.item.open = false;
         if (name !== "wifi" && wifiLoader.item) wifiLoader.item.open = false;
         if (name !== "bt" && btLoader.item) btLoader.item.open = false;
+    }
+
+    Process {
+        id: matugenProbe
+        command: ["bash", "-lc", "python3 - <<'PY'\nimport json, os, re\npath = os.path.expanduser('~/.config/Code/User/matugen-colors.json')\nfallback = '#7c3aed'\ntry:\n    with open(path, 'r', encoding='utf-8') as f:\n        data = json.load(f)\n    wc = data.get('workbench.colorCustomizations', {})\n    raw = wc.get('focusBorder') or wc.get('editorCursor.foreground') or wc.get('list.activeSelectionForeground') or ''\n    m = re.search(r'#[0-9a-fA-F]{6,8}', str(raw))\n    print(m.group(0) if m else fallback)\nexcept Exception:\n    print(fallback)\nPY"]
+        running: true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const c = text.trim();
+                if (/^#[0-9a-fA-F]{6,8}$/.test(c))
+                    Theme.accent = c;
+            }
+        }
+    }
+
+    Timer {
+        interval: 8000
+        running: true
+        repeat: true
+        onTriggered: matugenProbe.running = true
     }
 
     Rectangle {
