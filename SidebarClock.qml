@@ -48,15 +48,17 @@ Item {
             Text {
                 text: Qt.formatTime(root.nowTime, "hh:mm")
                 color: Theme.textPrimary
-                font.pixelSize: 15
+                font.pixelSize: 21
                 font.weight: Font.Bold
+                anchors.verticalCenter: parent.verticalCenter
             }
-            Rectangle { width: 2; height: 14; radius: 1; color: Theme.accent; anchors.verticalCenter: parent.verticalCenter }
+            Rectangle { width: 2; height: 18; radius: 1; color: Theme.accent; anchors.verticalCenter: parent.verticalCenter }
             Text {
                 text: `${Qt.locale("pt_BR").dayName(root.nowTime.getDay(), Locale.ShortFormat).slice(0,3).toUpperCase()} ${Qt.formatDate(root.nowTime, "dd")}`
                 color: Theme.accent
-                font.pixelSize: 10
+                font.pixelSize: 13
                 font.weight: Font.Medium
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 

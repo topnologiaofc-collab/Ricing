@@ -12,6 +12,7 @@ Item {
     property string cachedTitle: "Sem mídia"
     property string cachedArtist: ""
     property string cachedArtUrl: ""
+    property var lastPlayer: null
     readonly property var activePlayer: {
         for (const p of playersList) {
             if (p.playbackState === MprisPlaybackState.Playing)
@@ -19,6 +20,7 @@ Item {
         }
         return playersList.length > 0 ? playersList[0] : null;
     }
+    readonly property var controlPlayer: activePlayer || lastPlayer
 
     function msToClock(ms) {
         const s = Math.max(0, Math.floor(ms / 1000));
@@ -27,6 +29,7 @@ Item {
 
     function refreshCache() {
         if (!activePlayer) return;
+        lastPlayer = activePlayer;
         if (activePlayer.trackTitle) cachedTitle = activePlayer.trackTitle;
         if (activePlayer.trackArtist) cachedArtist = activePlayer.trackArtist;
         if (activePlayer.trackArtUrl) cachedArtUrl = activePlayer.trackArtUrl;
@@ -51,7 +54,7 @@ Item {
 
             Image {
                 anchors.fill: parent
-                source: root.activePlayer ? root.activePlayer.trackArtUrl : root.cachedArtUrl
+                source: root.controlPlayer ? root.controlPlayer.trackArtUrl : root.cachedArtUrl
                 fillMode: Image.PreserveAspectCrop
                 visible: source !== ""
             }
@@ -65,10 +68,10 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if (!root.activePlayer) return;
-                    if (typeof root.activePlayer.togglePlaying === "function") root.activePlayer.togglePlaying();
-                    else if (root.activePlayer.playbackState === MprisPlaybackState.Playing && typeof root.activePlayer.pause === "function") root.activePlayer.pause();
-                    else if (typeof root.activePlayer.play === "function") root.activePlayer.play();
+                    if (!root.controlPlayer) return;
+                    if (typeof root.controlPlayer.togglePlaying === "function") root.controlPlayer.togglePlaying();
+                    else if (root.controlPlayer.playbackState === MprisPlaybackState.Playing && typeof root.controlPlayer.pause === "function") root.controlPlayer.pause();
+                    else if (typeof root.controlPlayer.play === "function") root.controlPlayer.play();
                 }
             }
         }
@@ -85,8 +88,9 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    if (!root.activePlayer) return;
-                    if (typeof root.activePlayer.previous === "function") root.activePlayer.previous();
+                    if (!root.controlPlayer) return;
+                    if (typeof root.controlPlayer.previous === "function") root.controlPlayer.previous();
+                    else if (typeof root.controlPlayer.goPrevious === "function") root.controlPlayer.goPrevious();
                 }
             }
         }
@@ -162,8 +166,9 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    if (!root.activePlayer) return;
-                    if (typeof root.activePlayer.next === "function") root.activePlayer.next();
+                    if (!root.controlPlayer) return;
+                    if (typeof root.controlPlayer.next === "function") root.controlPlayer.next();
+                    else if (typeof root.controlPlayer.goNext === "function") root.controlPlayer.goNext();
                 }
             }
         }

@@ -24,7 +24,7 @@ Item {
         border.color: root.open ? Qt.alpha(Theme.accent, 0.6) : Qt.rgba(1,1,1,0.08)
         color: (root.open || mouse.containsMouse) && root.powered ? Qt.alpha(Theme.accent, 0.16) : "transparent"
 
-        Text { anchors.centerIn: parent; text: "⌁"; color: root.powered ? Theme.accent : Theme.textMuted; font.pixelSize: 11 }
+        Text { anchors.centerIn: parent; text: "B"; color: root.powered ? Theme.accent : Theme.textMuted; font.pixelSize: 11; font.weight: Font.Bold }
 
         MouseArea {
             id: mouse
@@ -42,8 +42,8 @@ Item {
         visible: root.open
         color: "transparent"
         anchor.window: root.QsWindow.window
-        anchor.rect.x: root.x - (Theme.popupWidth - root.width) / 2
-        anchor.rect.y: root.y + root.height + 8
+        anchor.rect.x: ((root.parent ? root.parent.x : root.x) + (root.width - Theme.popupWidth) / 2)
+        anchor.rect.y: (root.parent ? root.parent.y : root.y) + root.height + 8
         implicitWidth: Theme.popupWidth
         implicitHeight: 180
 
