@@ -72,12 +72,29 @@ PanelWindow {
 
             Item { Layout.fillWidth: true }
 
-            Loader {
+            Item {
                 Layout.alignment: Qt.AlignVCenter
                 Layout.rightMargin: 8
                 Layout.preferredWidth: 34
                 Layout.preferredHeight: 34
-                source: Qt.resolvedUrl("QuickSettings.qml")
+                width: 34
+                height: 34
+
+                Loader {
+                    id: quickSettingsLoader
+                    anchors.fill: parent
+                    source: Qt.resolvedUrl("./QuickSettings.qml")
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 8
+                    color: Qt.rgba(1,1,1,0.08)
+                    border.width: 1
+                    border.color: Qt.rgba(1,1,1,0.12)
+                    visible: quickSettingsLoader.status !== Loader.Ready
+                    Text { anchors.centerIn: parent; text: "⚙"; color: Theme.textPrimary; font.pixelSize: 11 }
+                }
             }
             Loader { Layout.alignment: Qt.AlignVCenter; source: Qt.resolvedUrl("SidebarBattery.qml") }
         }
