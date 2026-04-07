@@ -4,7 +4,7 @@ Pixel-faithful sidebar recreation from the provided HTML reference, adapted for 
 
 ## Files
 
-- `shell.qml` — root `PanelWindow`, left/top/bottom anchored, exclusive zone enabled.
+- `shell.qml` — root `PanelWindow`, top/left/right anchored as a horizontal desktop bar, exclusive zone enabled.
 - `Theme.qml` — color + size tokens.
 - `SidebarClock.qml` — clock widget and right-side calendar popup.
 - `SidebarWorkspaces.qml` — Hyprland workspace indicators and switching.

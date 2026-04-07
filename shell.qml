@@ -6,12 +6,12 @@ import "."
 PanelWindow {
     id: root
     anchors.left: true
+    anchors.right: true
     anchors.top: true
-    anchors.bottom: true
-    exclusiveZone: Theme.sidebarWidth + 8
+    exclusiveZone: 148
     color: "transparent"
 
-    implicitWidth: Theme.sidebarWidth + 16
+    implicitHeight: 148
 
     function closeOthers(name) {
         if (name !== "calendar" && clockLoader.item) clockLoader.item.open = false;
@@ -21,43 +21,40 @@ PanelWindow {
 
     Rectangle {
         anchors.left: parent.left
-        anchors.leftMargin: 0
+        anchors.right: parent.right
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
         anchors.topMargin: 0
-        width: Theme.sidebarWidth
+        height: 136
         radius: Theme.sidebarRadius
         color: Qt.rgba(13/255,17/255,23/255,0.85)
         border.width: 1
         border.color: Theme.border
 
-        ColumnLayout {
+        RowLayout {
             anchors.fill: parent
-            anchors.topMargin: 14
-            anchors.bottomMargin: 10
+            anchors.leftMargin: 14
+            anchors.rightMargin: 14
             spacing: 0
 
             Loader {
                 id: clockLoader
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignVCenter
                 source: Qt.resolvedUrl("SidebarClock.qml")
                 onLoaded: if (item && item.requestCloseOthers) item.requestCloseOthers.connect(root.closeOthers)
             }
 
-            Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
+            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 36; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
 
-            Loader { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 2; Layout.bottomMargin: 2; source: Qt.resolvedUrl("SidebarWorkspaces.qml") }
+            Loader { Layout.alignment: Qt.AlignVCenter; Layout.leftMargin: 2; Layout.rightMargin: 2; source: Qt.resolvedUrl("SidebarWorkspaces.qml") }
 
-            Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
+            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 36; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
 
-            Loader { Layout.alignment: Qt.AlignHCenter; source: Qt.resolvedUrl("SidebarMedia.qml") }
+            Loader { Layout.alignment: Qt.AlignVCenter; source: Qt.resolvedUrl("SidebarMedia.qml") }
 
-            Item { Layout.fillHeight: true }
-
-            Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
+            Rectangle { Layout.alignment: Qt.AlignVCenter; width: 1; height: 36; color: Theme.separator; Layout.leftMargin: 6; Layout.rightMargin: 6 }
 
             Row {
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignVCenter
                 spacing: 4
                 Loader {
                     id: wifiLoader
@@ -71,8 +68,7 @@ PanelWindow {
                 }
             }
 
-            Loader { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 4; source: Qt.resolvedUrl("SidebarBattery.qml") }
-            Item { Layout.preferredHeight: 6 }
+            Loader { Layout.alignment: Qt.AlignVCenter; Layout.leftMargin: 8; source: Qt.resolvedUrl("SidebarBattery.qml") }
         }
     }
 }
