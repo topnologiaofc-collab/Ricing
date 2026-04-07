@@ -10,6 +10,7 @@ Item {
     height: 34
 
     property bool open: false
+    property bool showButton: true
     property bool wifiOn: true
     property bool btOn: true
     property bool dndOn: false
@@ -22,6 +23,7 @@ Item {
 
     Rectangle {
         id: button
+        visible: root.showButton
         anchors.centerIn: parent
         width: 28
         height: 28

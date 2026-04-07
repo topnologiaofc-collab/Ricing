@@ -107,7 +107,7 @@ PanelWindow {
                     id: quickSettingsLoader
                     anchors.fill: parent
                     source: Qt.resolvedUrl("./QuickSettings.qml")
-                    visible: false
+                    onLoaded: if (item) item.showButton = false
                 }
             }
             Loader { Layout.alignment: Qt.AlignVCenter; source: Qt.resolvedUrl("SidebarBattery.qml") }
