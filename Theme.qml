@@ -22,7 +22,7 @@ QtObject {
 
     Process {
         id: matugenProbe
-        command: ["bash", "-lc", "for f in \"$HOME/.config/Code/User/matugen-colors.json\" \"$HOME/.config/Code - OSS/User/matugen-colors.json\" \"$HOME/.config/hypr/colors.conf\" \"$HOME/.config/waybar/colors.css\" \"$HOME/.cache/wal/colors.json\"; do [ -f \"$f\" ] || continue; c=$(grep -Eio '(primary|accent|mauve|color7|tertiary)[^#]*#[0-9a-f]{6,8}' \"$f\" | grep -Eo '#[0-9A-Fa-f]{6,8}' | head -n1); [ -n \"$c\" ] || c=$(grep -Eo '#[0-9A-Fa-f]{6,8}' \"$f\" | head -n1); if [ -n \"$c\" ]; then echo \"$c\"; exit 0; fi; done; echo '#7c3aed'"]
+        command: ["bash", "-lc", "python3 - <<'PY'\nimport json, os, re\npath = os.path.expanduser('~/.config/Code/User/matugen-colors.json')\nfallback = '#7c3aed'\ntry:\n    with open(path, 'r', encoding='utf-8') as f:\n        data = json.load(f)\n    wc = data.get('workbench.colorCustomizations', {})\n    raw = wc.get('focusBorder') or wc.get('editorCursor.foreground') or wc.get('list.activeSelectionForeground') or ''\n    m = re.search(r'#[0-9a-fA-F]{6,8}', str(raw))\n    print(m.group(0) if m else fallback)\nexcept Exception:\n    print(fallback)\nPY"]
         running: true
         stdout: StdioCollector {
             onStreamFinished: {
