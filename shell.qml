@@ -80,20 +80,34 @@ PanelWindow {
                 width: 34
                 height: 34
 
+                Rectangle {
+                    id: qsButton
+                    anchors.fill: parent
+                    radius: 8
+                    color: qsMouse.containsMouse ? Qt.alpha(Theme.accent, 0.18) : Qt.rgba(1,1,1,0.08)
+                    border.width: 1
+                    border.color: Qt.rgba(1,1,1,0.12)
+                    Text { anchors.centerIn: parent; text: "⚙"; color: Theme.textPrimary; font.pixelSize: 11 }
+                    MouseArea {
+                        id: qsMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            if (!quickSettingsLoader.item) return;
+                            quickSettingsLoader.item.open = !quickSettingsLoader.item.open;
+                            if (quickSettingsLoader.item.open) {
+                                if (typeof quickSettingsLoader.item.refreshWifi === "function") quickSettingsLoader.item.refreshWifi();
+                                if (typeof quickSettingsLoader.item.refreshBt === "function") quickSettingsLoader.item.refreshBt();
+                            }
+                        }
+                    }
+                }
+
                 Loader {
                     id: quickSettingsLoader
                     anchors.fill: parent
                     source: Qt.resolvedUrl("./QuickSettings.qml")
-                }
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 8
-                    color: Qt.rgba(1,1,1,0.08)
-                    border.width: 1
-                    border.color: Qt.rgba(1,1,1,0.12)
-                    visible: quickSettingsLoader.status !== Loader.Ready
-                    Text { anchors.centerIn: parent; text: "⚙"; color: Theme.textPrimary; font.pixelSize: 11 }
+                    visible: false
                 }
             }
             Loader { Layout.alignment: Qt.AlignVCenter; source: Qt.resolvedUrl("SidebarBattery.qml") }
