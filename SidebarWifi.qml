@@ -6,8 +6,8 @@ import "."
 
 Item {
     id: root
-    width: 86
-    height: 36
+    width: 34
+    height: 34
     property bool open: false
     signal requestCloseOthers(string who)
 
@@ -24,38 +24,29 @@ Item {
 
     function refresh() { scan.running = true; }
 
-    Row {
+    Rectangle {
+        id: btn
         anchors.centerIn: parent
-        spacing: 6
+        width: 28
+        height: 28
+        radius: 8
+        border.width: 1
+        border.color: root.open ? Qt.alpha(Theme.accent, 0.6) : Qt.rgba(1,1,1,0.08)
+        color: root.open || mouse.containsMouse ? Qt.alpha(Theme.accent, 0.16) : "transparent"
 
-        Rectangle {
-            id: btn
-            width: 28
-            height: 28
-            radius: 8
-            color: root.open || mouse.containsMouse ? Qt.alpha(Theme.accent, 0.15) : "transparent"
-            Text { anchors.centerIn: parent; text: "W"; color: root.activeSsid !== "--" ? Theme.accent : Theme.textMuted; font.pixelSize: 11 }
-            MouseArea {
-                id: mouse
-                anchors.fill: parent
-                hoverEnabled: true
-                onClicked: {
-                    root.open = !root.open;
-                    if (root.open) {
-                        root.requestCloseOthers("wifi");
-                        root.refresh();
-                    }
+        Text { anchors.centerIn: parent; text: "◉"; color: root.activeSsid !== "--" ? Theme.accent : Theme.textMuted; font.pixelSize: 10 }
+
+        MouseArea {
+            id: mouse
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: {
+                root.open = !root.open;
+                if (root.open) {
+                    root.requestCloseOthers("wifi");
+                    root.refresh();
                 }
             }
-        }
-
-        Text {
-            width: 48
-            text: (root.activeSsid || "--").slice(0, 8)
-            color: root.activeSsid !== "--" ? Theme.accent : Theme.textMuted
-            font.pixelSize: 9
-            elide: Text.ElideRight
-            verticalAlignment: Text.AlignVCenter
         }
     }
 
@@ -89,8 +80,8 @@ Item {
         visible: root.open
         color: "transparent"
         anchor.window: root.QsWindow.window
-        anchor.rect.x: Math.max(6, root.mapToItem(null, 0, 0).x - 4)
-        anchor.rect.y: root.mapToItem(null, 0, 0).y + btn.height + 8
+        anchor.rect.x: root.x - (Theme.popupWidth - root.width) / 2
+        anchor.rect.y: root.y + root.height + 8
         implicitWidth: Theme.popupWidth
         implicitHeight: Math.max(120, 26 + root.networks.length * 28)
 

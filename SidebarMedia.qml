@@ -9,6 +9,9 @@ Item {
     height: 74
 
     readonly property var playersList: (Mpris.players && Mpris.players.values) ? Mpris.players.values : (Mpris.players || [])
+    property string cachedTitle: "Sem mídia"
+    property string cachedArtist: ""
+    property string cachedArtUrl: ""
     readonly property var activePlayer: {
         for (const p of playersList) {
             if (p.playbackState === MprisPlaybackState.Playing)
@@ -21,6 +24,16 @@ Item {
         const s = Math.max(0, Math.floor(ms / 1000));
         return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
     }
+
+    function refreshCache() {
+        if (!activePlayer) return;
+        if (activePlayer.trackTitle) cachedTitle = activePlayer.trackTitle;
+        if (activePlayer.trackArtist) cachedArtist = activePlayer.trackArtist;
+        if (activePlayer.trackArtUrl) cachedArtUrl = activePlayer.trackArtUrl;
+    }
+
+    onActivePlayerChanged: refreshCache()
+    Timer { interval: 1000; running: true; repeat: true; onTriggered: refreshCache() }
 
     Row {
         anchors.verticalCenter: parent.verticalCenter
@@ -38,7 +51,7 @@ Item {
 
             Image {
                 anchors.fill: parent
-                source: root.activePlayer ? root.activePlayer.trackArtUrl : ""
+                source: root.activePlayer ? root.activePlayer.trackArtUrl : root.cachedArtUrl
                 fillMode: Image.PreserveAspectCrop
                 visible: source !== ""
             }
@@ -87,14 +100,14 @@ Item {
                 spacing: 6
                 Text {
                     width: 150
-                    text: root.activePlayer ? (root.activePlayer.trackTitle || "Sem mídia") : "Sem mídia"
+                    text: root.activePlayer ? (root.activePlayer.trackTitle || root.cachedTitle) : root.cachedTitle
                     color: Theme.textPrimary
                     font.pixelSize: 10
                     elide: Text.ElideRight
                 }
                 Text {
                     width: 90
-                    text: root.activePlayer ? (root.activePlayer.trackArtist || "") : ""
+                    text: root.activePlayer ? (root.activePlayer.trackArtist || root.cachedArtist) : root.cachedArtist
                     color: Theme.textMuted
                     font.pixelSize: 9
                     elide: Text.ElideRight

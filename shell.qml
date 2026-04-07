@@ -9,10 +9,10 @@ PanelWindow {
     anchors.left: true
     anchors.right: true
     anchors.top: true
-    exclusiveZone: 102
+    exclusiveZone: 84
     color: "transparent"
 
-    implicitHeight: 102
+    implicitHeight: 84
 
     function closeOthers(name) {
         if (name !== "calendar" && clockLoader.item) clockLoader.item.open = false;
@@ -45,7 +45,7 @@ PanelWindow {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 0
-        height: 92
+        height: 76
         radius: Theme.sidebarRadius
         color: Qt.rgba(13/255,17/255,23/255,0.85)
         border.width: 1
