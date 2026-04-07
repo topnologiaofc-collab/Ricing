@@ -72,7 +72,13 @@ PanelWindow {
 
             Item { Layout.fillWidth: true }
 
-            Loader { Layout.alignment: Qt.AlignVCenter; Layout.rightMargin: 8; source: Qt.resolvedUrl("QuickSettings.qml") }
+            Loader {
+                Layout.alignment: Qt.AlignVCenter
+                Layout.rightMargin: 8
+                Layout.preferredWidth: 34
+                Layout.preferredHeight: 34
+                source: Qt.resolvedUrl("QuickSettings.qml")
+            }
             Loader { Layout.alignment: Qt.AlignVCenter; source: Qt.resolvedUrl("SidebarBattery.qml") }
         }
     }
