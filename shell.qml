@@ -14,9 +14,9 @@ PanelWindow {
     implicitWidth: Theme.sidebarWidth + 16
 
     function closeOthers(name) {
-        if (name !== "calendar") clock.open = false;
-        if (name !== "wifi") wifi.open = false;
-        if (name !== "bt") bt.open = false;
+        if (name !== "calendar" && clockLoader.item) clockLoader.item.open = false;
+        if (name !== "wifi" && wifiLoader.item) wifiLoader.item.open = false;
+        if (name !== "bt" && btLoader.item) btLoader.item.open = false;
     }
 
     Rectangle {
@@ -37,19 +37,20 @@ PanelWindow {
             anchors.bottomMargin: 10
             spacing: 0
 
-            SidebarClock {
-                id: clock
+            Loader {
+                id: clockLoader
                 Layout.alignment: Qt.AlignHCenter
-                onRequestCloseOthers: (who) => root.closeOthers(who)
+                source: Qt.resolvedUrl("SidebarClock.qml")
+                onLoaded: if (item && item.requestCloseOthers) item.requestCloseOthers.connect(root.closeOthers)
             }
 
             Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
 
-            SidebarWorkspaces { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 2; Layout.bottomMargin: 2 }
+            Loader { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 2; Layout.bottomMargin: 2; source: Qt.resolvedUrl("SidebarWorkspaces.qml") }
 
             Rectangle { Layout.alignment: Qt.AlignHCenter; width: 36; height: 1; color: Theme.separator; Layout.topMargin: 6; Layout.bottomMargin: 6 }
 
-            SidebarMedia { Layout.alignment: Qt.AlignHCenter }
+            Loader { Layout.alignment: Qt.AlignHCenter; source: Qt.resolvedUrl("SidebarMedia.qml") }
 
             Item { Layout.fillHeight: true }
 
@@ -58,11 +59,19 @@ PanelWindow {
             Row {
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 4
-                SidebarWifi { id: wifi; onRequestCloseOthers: (who) => root.closeOthers(who) }
-                SidebarBluetooth { id: bt; onRequestCloseOthers: (who) => root.closeOthers(who) }
+                Loader {
+                    id: wifiLoader
+                    source: Qt.resolvedUrl("SidebarWifi.qml")
+                    onLoaded: if (item && item.requestCloseOthers) item.requestCloseOthers.connect(root.closeOthers)
+                }
+                Loader {
+                    id: btLoader
+                    source: Qt.resolvedUrl("SidebarBluetooth.qml")
+                    onLoaded: if (item && item.requestCloseOthers) item.requestCloseOthers.connect(root.closeOthers)
+                }
             }
 
-            SidebarBattery { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 4 }
+            Loader { Layout.alignment: Qt.AlignHCenter; Layout.topMargin: 4; source: Qt.resolvedUrl("SidebarBattery.qml") }
             Item { Layout.preferredHeight: 6 }
         }
     }
