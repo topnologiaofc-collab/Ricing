@@ -19,7 +19,7 @@ use crate::{app::App, history::HistoryDb};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let picker = Picker::from_query_stdio()?;
+    let picker = Picker::from_termios()?;
     install_panic_hook();
 
     enable_raw_mode()?;

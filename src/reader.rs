@@ -9,7 +9,7 @@ use ratatui::{
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
-use ratatui_image::{picker::Picker, protocol::StatefulProtocol, StatefulImage};
+use ratatui_image::{picker::Picker, StatefulImage};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ReadMode {
@@ -22,7 +22,6 @@ pub struct ReaderState {
     pub current_page: usize,
     pub mode: ReadMode,
     pub cache: HashMap<usize, DynamicImage>,
-    protocol_state: Option<StatefulProtocol>,
 }
 
 impl ReaderState {
@@ -32,7 +31,6 @@ impl ReaderState {
             current_page: 0,
             mode: ReadMode::Page,
             cache: HashMap::new(),
-            protocol_state: None,
         }
     }
 
@@ -55,10 +53,6 @@ impl ReaderState {
         };
     }
 
-    pub fn current_page_url(&self) -> Option<&str> {
-        self.pages.get(self.current_page).map(String::as_str)
-    }
-
     pub fn upsert_image(&mut self, index: usize, image: DynamicImage) {
         self.cache.insert(index, image);
     }
@@ -69,7 +63,7 @@ pub fn draw_reader(frame: &mut Frame<'_>, state: &mut ReaderState, picker: &Pick
 
     match state.mode {
         ReadMode::Page => draw_single(frame, chunks[0], state, picker),
-        ReadMode::Webtoon => draw_webtoon(frame, chunks[0], state, picker),
+        ReadMode::Webtoon => draw_webtoon(frame, chunks[0], state),
     }
 
     let info = Paragraph::new(Line::from(format!(
@@ -95,13 +89,8 @@ fn draw_single(
 
     if let Some(img) = state.cache.get(&state.current_page) {
         let mut protocol = picker.new_resize_protocol(img.clone());
-        if state.protocol_state.is_none() {
-            state.protocol_state = Some(StatefulProtocol::default());
-        }
-        let image_widget = StatefulImage::default();
-        if let Some(protocol_state) = state.protocol_state.as_mut() {
-            frame.render_stateful_widget(image_widget, inner, &mut (protocol, protocol_state));
-        }
+        let image_widget = StatefulImage::new(None);
+        frame.render_stateful_widget(image_widget, inner, &mut protocol);
     } else {
         frame.render_widget(
             Paragraph::new("Carregando imagem...").alignment(Alignment::Center),
@@ -110,12 +99,7 @@ fn draw_single(
     }
 }
 
-fn draw_webtoon(
-    frame: &mut Frame<'_>,
-    area: ratatui::layout::Rect,
-    state: &mut ReaderState,
-    _picker: &Picker,
-) {
+fn draw_webtoon(frame: &mut Frame<'_>, area: ratatui::layout::Rect, state: &mut ReaderState) {
     let block = Block::default().borders(Borders::ALL).title("Webtoon");
     let inner = block.inner(area);
     frame.render_widget(block, area);
