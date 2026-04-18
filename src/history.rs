@@ -1,4 +1,8 @@
-use std::{env, path::PathBuf, time::{SystemTime, UNIX_EPOCH}};
+use std::{
+    env,
+    path::PathBuf,
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};

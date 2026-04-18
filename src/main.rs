@@ -5,7 +5,10 @@ mod reader;
 mod sources;
 mod ui;
 
-use std::{io::{self, stdout}, panic};
+use std::{
+    io::{self, stdout},
+    panic,
+};
 
 use anyhow::{anyhow, Result};
 use crossterm::{

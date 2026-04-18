@@ -28,7 +28,10 @@ pub enum AsyncMessage {
     SearchLoaded(Result<Vec<MangaInfo>>),
     ChaptersLoaded(Result<Vec<Chapter>>),
     PagesLoaded(Result<Vec<String>>),
-    ImageLoaded { idx: usize, image: Result<DynamicImage> },
+    ImageLoaded {
+        idx: usize,
+        image: Result<DynamicImage>,
+    },
 }
 
 pub struct App {
@@ -234,7 +237,9 @@ impl App {
         let tx = self.tx.clone();
         tokio::spawn(async move {
             let source = get_source("cubari");
-            let _ = tx.send(AsyncMessage::ChaptersLoaded(source.get_chapters(&manga_id).await));
+            let _ = tx.send(AsyncMessage::ChaptersLoaded(
+                source.get_chapters(&manga_id).await,
+            ));
         });
     }
 
@@ -242,7 +247,9 @@ impl App {
         let tx = self.tx.clone();
         tokio::spawn(async move {
             let source = get_source("cubari");
-            let _ = tx.send(AsyncMessage::PagesLoaded(source.get_pages(&chapter_id).await));
+            let _ = tx.send(AsyncMessage::PagesLoaded(
+                source.get_pages(&chapter_id).await,
+            ));
         });
     }
 

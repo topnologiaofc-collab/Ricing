@@ -58,8 +58,13 @@ impl ReaderState {
     }
 }
 
-pub fn draw_reader(frame: &mut Frame<'_>, state: &mut ReaderState, picker: &Picker) {
-    let chunks = Layout::vertical([Constraint::Min(1), Constraint::Length(1)]).split(frame.size());
+pub fn draw_reader(
+    frame: &mut Frame<'_>,
+    area: ratatui::layout::Rect,
+    state: &mut ReaderState,
+    picker: &Picker,
+) {
+    let chunks = Layout::vertical([Constraint::Min(1), Constraint::Length(1)]).split(area);
 
     match state.mode {
         ReadMode::Page => draw_single(frame, chunks[0], state, picker),
@@ -114,7 +119,10 @@ fn draw_webtoon(frame: &mut Frame<'_>, area: ratatui::layout::Rect, state: &mut 
         } else {
             "[baixando]"
         };
-        lines.push(Line::from(format!("{marker} Página {:03} {loaded}", idx + 1)));
+        lines.push(Line::from(format!(
+            "{marker} Página {:03} {loaded}",
+            idx + 1
+        )));
     }
 
     frame.render_widget(Paragraph::new(lines), inner);

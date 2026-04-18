@@ -26,6 +26,8 @@ impl CubariSource {
             .trim()
             .trim_start_matches("https://")
             .trim_start_matches("http://")
+            .trim_start_matches("proxy.cubari.moe/read/")
+            .trim_start_matches("proxy.cubari.moe/")
             .trim_start_matches("cubari.moe/read/")
             .trim_start_matches("cubari.moe/")
             .trim_matches('/');
@@ -73,7 +75,7 @@ struct GroupData {
 impl MangaSource for CubariSource {
     async fn search(&self, query: &str) -> Result<Vec<MangaInfo>> {
         let (proxy, slug) = Self::parse_query(query)?;
-        let url = format!("https://cubari.moe/read/api/{proxy}/series/{slug}/");
+        let url = format!("https://proxy.cubari.moe/read/api/{proxy}/series/{slug}/");
         let data: SeriesResponse = self
             .client
             .get(&url)
@@ -94,7 +96,7 @@ impl MangaSource for CubariSource {
 
     async fn get_chapters(&self, manga_id: &str) -> Result<Vec<Chapter>> {
         let (proxy, slug) = Self::parse_query(manga_id)?;
-        let url = format!("https://cubari.moe/read/api/{proxy}/series/{slug}/");
+        let url = format!("https://proxy.cubari.moe/read/api/{proxy}/series/{slug}/");
         let data: SeriesResponse = self
             .client
             .get(&url)
@@ -112,7 +114,9 @@ impl MangaSource for CubariSource {
                 let number = chapter_id.parse::<f32>().unwrap_or(0.0);
                 Chapter {
                     id: format!("{proxy}|{slug}|{chapter_id}"),
-                    title: entry.title.unwrap_or_else(|| format!("Capítulo {chapter_id}")),
+                    title: entry
+                        .title
+                        .unwrap_or_else(|| format!("Capítulo {chapter_id}")),
                     number,
                     read: false,
                 }
@@ -134,10 +138,9 @@ impl MangaSource for CubariSource {
             return Err(anyhow!("chapter_id inválido"));
         }
         let (proxy, slug, chapter) = (parts[0], parts[1], parts[2]);
-        let primary = format!(
-            "https://cubari.moe/read/api/{proxy}/chapter/{slug}/{chapter}/"
-        );
-        let backup = format!("https://cubari.moe/read/api/{proxy}/series/{slug}/{chapter}/");
+        let primary =
+            format!("https://proxy.cubari.moe/read/api/{proxy}/chapter/{slug}/{chapter}/");
+        let backup = format!("https://proxy.cubari.moe/read/api/{proxy}/series/{slug}/{chapter}/");
 
         for url in [primary, backup] {
             let response = self.client.get(&url).send().await?;
