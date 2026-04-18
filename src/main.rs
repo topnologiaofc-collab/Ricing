@@ -7,7 +7,7 @@ mod ui;
 
 use std::{io::{self, stdout}, panic};
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
@@ -19,7 +19,7 @@ use crate::{app::App, history::HistoryDb};
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let picker = Picker::from_termios()?;
+    let picker = Picker::from_termios().map_err(|e| anyhow!(e.to_string()))?;
     install_panic_hook();
 
     enable_raw_mode()?;

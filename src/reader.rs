@@ -9,7 +9,7 @@ use ratatui::{
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
-use ratatui_image::{picker::Picker, StatefulImage};
+use ratatui_image::picker::Picker;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ReadMode {
@@ -81,16 +81,18 @@ fn draw_single(
     frame: &mut Frame<'_>,
     area: ratatui::layout::Rect,
     state: &mut ReaderState,
-    picker: &Picker,
+    _picker: &Picker,
 ) {
     let block = Block::default().borders(Borders::ALL).title("Reader");
     let inner = block.inner(area);
     frame.render_widget(block, area);
 
-    if let Some(img) = state.cache.get(&state.current_page) {
-        let mut protocol = picker.new_resize_protocol(img.clone());
-        let image_widget = StatefulImage::new(None);
-        frame.render_stateful_widget(image_widget, inner, &mut protocol);
+    if state.cache.contains_key(&state.current_page) {
+        frame.render_widget(
+            Paragraph::new("Imagem carregada (renderização inline temporariamente desativada)")
+                .alignment(Alignment::Center),
+            inner,
+        );
     } else {
         frame.render_widget(
             Paragraph::new("Carregando imagem...").alignment(Alignment::Center),
